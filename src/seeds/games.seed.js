@@ -1,3 +1,7 @@
+const mongoose = require("mongoose")
+
+const Game = require("../api/models/game_model")
+
 const games = [
     {
       name: "Cyberpunk 2077",
@@ -126,3 +130,31 @@ const games = [
       console: ["PC", "Xbox", "PS5", "Switch"],
     },
 ]
+
+const gamesDocuments = games.map(game=> new Game(game))
+
+const feedGames = async () => {
+try {
+  await mongoose
+    .connect(process.env.URL_DB)
+    .then(async ()=> {
+      const allGames = await Game.find()
+      if(allGames.length>0) {
+        await Game.collection.drop()
+      }
+    })
+    .catch((error) => {console.log(`error deleting data: ${error}`)})
+    .then(async () => {
+      await Game.insertMany(gamesDocuments)
+    })
+    .catch((error) => {console.log(`error creating data: ${error}`)})
+    // .finally(() => { mongoose.disconnect()})
+} catch (error) {
+  console.log(`error feeding Games data: ${error}`)
+}
+}
+
+feedGames()
+
+module.exports = gamesDocuments
+module.exports = { feedGames }
