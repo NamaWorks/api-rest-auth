@@ -10,9 +10,9 @@ const isAuth = async(req, res, next) => {
       return res.status(400).json(`you are not authorised`)
     }
     const parsedToken = token.replace("Bearer ", "")
-    console.log(parsedToken)
+    // console.log(parsedToken)
     const  { id } = verifyJwt(parsedToken)
-    console.log(id)
+    // console.log(id)
 
     const user = await User.findById(id)
     user.password = null

@@ -71,4 +71,19 @@ const getUsers = async (req, res, next) => {
     return res.status(400).json(error)
   }
 }
-module.exports = { register, login, deleteUser, getUsers }
+
+const updateUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const newUser = new User(req.body)
+    newUser._id = id
+
+    const updatedUser = await User.findByIdAndUpdate(id, newUser, {new:true})
+
+    return res.status(200).json(updatedUser)
+
+  } catch (error) {
+    
+  }
+}
+module.exports = { register, login, deleteUser, getUsers, updateUser }
