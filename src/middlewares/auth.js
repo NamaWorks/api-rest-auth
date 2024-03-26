@@ -28,22 +28,29 @@ const isAdmin = async (req, res, next) => {
   try {
     const token = req.headers.authorization
 
+
     if(!token) {
       return res.status(400).json(`you are not authorised`)
     }
 
     const parsedToken = token.replace("Bearer ", "")
+    
 
     const validToken = verifyJwt(parsedToken, process.env.JWT_SECRET)
+    
 
     const userLogued = await User.findById(validToken.id)
-    console.log(userLogued)
+    
+    const userRole = userLogued.role
+    
 
-    if(userLogued.role === "admin"){
+    if(userRole === "admin"){
     userLogued.password = null;
+    // req.user = user
     next()
-    }
+    } else {return res.json(`you are not an admin -`)}
   } catch (error) {
+    console.log(error)
     return res.status(400).json(`you are not an admin`)
   }
 }

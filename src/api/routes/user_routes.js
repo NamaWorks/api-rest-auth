@@ -9,4 +9,5 @@ usersRoutes.delete("/:id", [isAdmin], deleteUser)
 usersRoutes.put("/:id", [isAuth], updateUser)
 usersRoutes.get("/",[isAdmin], getUsers)
 
-module.exports = usersRoutes
+module.exports = usersRoutes   
+

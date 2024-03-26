@@ -2,7 +2,7 @@ const Game = require("../models/game_model");
 
 const getGames = async (req, res, next) => {
   try {
-    const games = await Game.find()
+    const games = await Game.find().populate("Console")
     return res.status(200).json(games)
   } catch (error) {
     return res.status(400).json(`failed getting games: ${error}`)
@@ -56,4 +56,18 @@ const createGame = async (req, res, next) => {
   }
 }
 
-module.exports = { getGames, updateGame, deleteGame, createGame }
+const getGameById = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const game = await Game.findById(id)
+    if (game) {
+			return res.status(200).json(game);
+		} else {
+			return res.status(404).json('no game found by this id');
+		}
+  } catch (error) {
+    return res.status(400).json(`error getting game by ID: ${error}`)
+  }
+}
+
+module.exports = { getGames, updateGame, deleteGame, createGame, getGameById }

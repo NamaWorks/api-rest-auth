@@ -10,7 +10,8 @@ const register = async (req,res,next) => {
       username: req.body.username,
       password: req.body.password,
       bornYear: req.body.bornYear,
-      role: req.body.role,
+      // role: req.body.role,
+      role: "user",
       profileImage: req.body.profileImage,
     })
     
@@ -29,16 +30,16 @@ const register = async (req,res,next) => {
 const login = async (req, res, next) => {
   try {
     const user = await User.findOne({username : req.body.username})
-
+  if(!user){ return res.status(400).json(`that user does not exist`)}
     if (user) {
       if(bcrypt.compareSync(req.body.password, user.password)) {
         const token = generateSign(user._id)
       return res.status(200).json({ user, token })
       } else {
-        return res.status(400).json("The user or password are not correct")
+        return res.status(400).json("The user or password is not correct")
       }
     } else {
-      return res.status(400).json("The user or password are not correct")
+      return res.status(400).json("The user or password is not correct")
     }
   
   } catch (error) {
