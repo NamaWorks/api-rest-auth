@@ -6,6 +6,7 @@ const gameSchema = new mongoose.Schema({
   genres: { type: Array, required:true},
   description: { type: String, required: true}, 
   console:{type: Array, required: true},
+  // console:[{type: mongoose.Types.ObjectId, ref: "Console"}],
 },
 {
   timestamps:true,
