@@ -134,6 +134,7 @@ let games = [
 
 // const gamesDocuments = games.map(game=> new Game(game))
 
+let gamesData = []
 const feedGames = async () => {
 try {
   await mongoose
@@ -147,36 +148,35 @@ try {
     .catch((error) => {console.log(`error deleting data: ${error}`)})
     .then(async() => {
       const consolesData = await Console.find()
-      const consolesMock = consolesData
-
+      const consolesMock = new Array(...await consolesData)
       const gamesArr = games.forEach(game => {
-        let consolesId = []
         const gameConsoles = game.console
-        // We enter the consoles inside each game 
-        let changeConsolesNamesForId = gameConsoles.forEach(async (consoleName) => {
-
-          let consolesIdArr = []
+        let consolesIdArr = []
+        // We enter the consoles inside each game
+          gameConsoles.forEach((consoleName) => {
             consolesMock.forEach((consoleItem) => {
               if(consoleItem.name === consoleName){
-                consolesIdArr.push(consoleItem._id)
+                let id = String(consoleItem._id)
+                consolesIdArr.push(id)
               }
-
+              game.console = consolesIdArr
             })
-            console.log(consolesIdArr)
-
-
             })
+              let  consoleOrigin  = game.console
+              gamesData.push(game)
           })
-    })
-
-
+        })
     .catch((error) => {console.log(`error creating data: ${error}`)})
+    .then(async()=> {
+        let gamesDocuments = gamesData.map(game => new Game(game))
+      await Game.insertMany(gamesDocuments)
+          
+    })
     // .finally(() => { mongoose.disconnect()})
 } catch (error) {
   console.log(`error feeding Games data: ${error}`)
 }
 }
-
 feedGames()
 
 // module.exports = gamesDocuments
