@@ -37,7 +37,7 @@ const feedConsoles = async () => {
       .then(async () => {
         await Console.insertMany(consolesDocuments)
       })
-      .catch((error) => {console.log(`error creating data: ${error}`)})
+      .catch((error) => {console.log(`error creating data-consoles: ${error}`)})
   } catch (error) {
     console.log(`error feeding consoles data: ${error}`)
   }

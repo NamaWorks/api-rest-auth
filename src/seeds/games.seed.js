@@ -134,8 +134,9 @@ let games = [
 
 // const gamesDocuments = games.map(game=> new Game(game))
 
-let gamesData = []
+
 const feedGames = async () => {
+  let gamesData = []
 try {
   await mongoose
     .connect(process.env.URL_DB)
@@ -148,13 +149,13 @@ try {
     .catch((error) => {console.log(`error deleting data: ${error}`)})
     .then(async() => {
       const consolesData = await Console.find()
-      const consolesMock = new Array(...await consolesData)
+
       const gamesArr = games.forEach(game => {
         const gameConsoles = game.console
         let consolesIdArr = []
-        // We enter the consoles inside each game
+
           gameConsoles.forEach((consoleName) => {
-            consolesMock.forEach((consoleItem) => {
+            consolesData.forEach((consoleItem) => {
               if(consoleItem.name === consoleName){
                 let id = String(consoleItem._id)
                 consolesIdArr.push(id)
@@ -162,15 +163,15 @@ try {
               game.console = consolesIdArr
             })
             })
-              let  consoleOrigin  = game.console
+
               gamesData.push(game)
           })
-        })
+    })
     .catch((error) => {console.log(`error creating data: ${error}`)})
     .then(async()=> {
         let gamesDocuments = gamesData.map(game => new Game(game))
-      await Game.insertMany(gamesDocuments)
-          
+        await Game.insertMany(gamesDocuments)
+        
     })
     // .finally(() => { mongoose.disconnect()})
 } catch (error) {

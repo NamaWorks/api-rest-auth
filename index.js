@@ -9,9 +9,10 @@ const { feedGames } = require("./src/seeds/games.seed");
 
 const app = express()
 
+
+connectDB()
 feedConsoles()
 feedGames()
-connectDB()
 
 app.use(express.json())
 
