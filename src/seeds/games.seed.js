@@ -150,11 +150,11 @@ try {
     .then(async() => {
       const consolesData = await Console.find()
 
-      const gamesArr = games.forEach(game => {
+      games.forEach(game => {
         const gameConsoles = game.console
         let consolesIdArr = []
           gameConsoles.forEach(async (consoleName) => {
-            await consolesData.forEach((consoleItem) => {
+            consolesData.forEach((consoleItem) => {
               if(consoleItem.name === consoleName){
                 let id = String(consoleItem._id)
                 consolesIdArr.push(id)
@@ -163,13 +163,16 @@ try {
             })
             })
 
-              gamesData.push(game)
+              // gamesData.push(game)
+              gamesData.push(new Game(game))
           })
     })
     .catch((error) => {console.log(`error creating data: ${error}`)})
     .then(async()=> {
-        let gamesDocuments = gamesData.map(game => new Game(game))
-        await Game.insertMany(gamesDocuments)
+        // let gamesDocuments = gamesData.map(game => new Game(game))
+        // await Game.insertMany(gamesDocuments)
+
+        await Game.insertMany(gamesData)
         
     })
     // .finally(() => { mongoose.disconnect()})
