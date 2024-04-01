@@ -11,8 +11,6 @@ const app = express()
 
 
 connectDB()
-feedConsoles()
-feedGames()
 
 app.use(express.json())
 

@@ -153,9 +153,8 @@ try {
       const gamesArr = games.forEach(game => {
         const gameConsoles = game.console
         let consolesIdArr = []
-
-          gameConsoles.forEach((consoleName) => {
-            consolesData.forEach((consoleItem) => {
+          gameConsoles.forEach(async (consoleName) => {
+            await consolesData.forEach((consoleItem) => {
               if(consoleItem.name === consoleName){
                 let id = String(consoleItem._id)
                 consolesIdArr.push(id)
